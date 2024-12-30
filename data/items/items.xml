@@ -56523,9 +56523,9 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="primarytype" value="tools"/>
 		<attribute key="weight" value="420"/>
 	</item>
-	<item id="30195" article="a" name="golden bell">
-		<attribute key="primarytype" value="creature products"/>
-		<attribute key="weight" value="155"/>
+	<item id="30195" article="a" name="Teleportation bell">
+		<attribute key="description" value="Use this bell to play a melody that will teleport you back home."/>
+		<attribute key="weight" value="0"/>
 	</item>
 	<item id="30196" article="a" name="yetislippers">
 		<attribute key="primarytype" value="boots"/>
@@ -76427,5 +76427,6 @@ Granted by TibiaGoals.com"/>
 		<attribute key="loottype" value="tools"/>
 		<attribute key="weight" value="30"/>
 	</item>
+	
 </items>
 

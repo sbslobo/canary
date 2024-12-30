@@ -105,7 +105,6 @@ monster.loot = {
 	{ name = "horseshoe", chance = 1250 },
 	{ name = "golden horseshoe", chance = 2510 },
 	{ name = "abyss hammer", chance = 1480 },
-	{ name = "golden bell", chance = 2548 },
 	{ name = "golden cotton reel", chance = 1254 },
 	{ name = "lucky pig", chance = 2540 },
 }

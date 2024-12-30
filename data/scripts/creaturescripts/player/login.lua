@@ -35,7 +35,7 @@ function playerLoginGlobal.onLogin(player)
 		loginStr = string.format("Your last visit in %s: %s.", SERVER_NAME, os.date("%d %b %Y %X", player:getLastLoginSaved()))
 	end
 	player:sendTextMessage(MESSAGE_LOGIN, loginStr)
-
+	player:registerEvent("taskSystemKill")
 	-- Promotion
 	local vocation = player:getVocation()
 	local promotion = vocation:getPromotion()

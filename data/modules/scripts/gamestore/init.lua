@@ -23,6 +23,7 @@ GameStore.OfferTypes = {
 	OFFER_TYPE_TEMPLE = 13,
 	OFFER_TYPE_BLESSINGS = 14,
 	OFFER_TYPE_PREMIUM = 15,
+	DUST_FORGE = 16,	
 	-- 16, -- Empty
 	OFFER_TYPE_ALLBLESSINGS = 17,
 	OFFER_TYPE_INSTANT_REWARD_ACCESS = 18,
@@ -54,6 +55,7 @@ GameStore.SubActions = {
 	CHARM_EXPANSION = 13,
 	TASKHUNTING_THIRDSLOT = 14,
 	PREY_THIRDSLOT_REDIRECT = 15,
+	DUST_FORGE = 15,	
 }
 
 GameStore.ActionType = {
@@ -430,6 +432,7 @@ function parseBuyStoreOffer(playerId, msg)
 			offer.type ~= GameStore.OfferTypes.OFFER_TYPE_NAMECHANGE
 			and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_EXPBOOST
 			and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_PREYBONUS
+			and offer.type ~= GameStore.OfferTypes.DUST_FORGE		
 			and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_PREYSLOT
 			and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_HUNTINGSLOT
 			and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_TEMPLE
@@ -494,6 +497,8 @@ function parseBuyStoreOffer(playerId, msg)
 			GameStore.processPreyThirdSlot(player)
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_PREYBONUS then
 			GameStore.processPreyBonusReroll(player, offer.count)
+		elseif offer.type == GameStore.OfferTypes.DUST_FORGE then
+			GameStore.processDustForge(player, offer.count)			
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_TEMPLE then
 			GameStore.processTempleTeleportPurchase(player)
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_CHARGES then
@@ -528,7 +533,7 @@ function parseBuyStoreOffer(playerId, msg)
 		return queueSendStoreAlertToUser(alertMessage, 500, playerId)
 	end
 
-	if table.contains({ GameStore.OfferTypes.OFFER_TYPE_HOUSE, GameStore.OfferTypes.OFFER_TYPE_EXPBOOST, GameStore.OfferTypes.OFFER_TYPE_PREYBONUS, GameStore.OfferTypes.OFFER_TYPE_BLESSINGS, GameStore.OfferTypes.OFFER_TYPE_ALLBLESSINGS, GameStore.OfferTypes.OFFER_TYPE_INSTANT_REWARD_ACCESS }, offer.type) then
+	if table.contains({ GameStore.OfferTypes.OFFER_TYPE_HOUSE, GameStore.OfferTypes.OFFER_TYPE_EXPBOOST, GameStore.OfferTypes.OFFER_TYPE_PREYBONUS, GameStore.OfferTypes.DUST_FORGE, GameStore.OfferTypes.OFFER_TYPE_BLESSINGS, GameStore.OfferTypes.OFFER_TYPE_ALLBLESSINGS, GameStore.OfferTypes.OFFER_TYPE_INSTANT_REWARD_ACCESS }, offer.type) then
 		insertPlayerTransactionSummary(player, offer)
 	end
 	local configure = useOfferConfigure(offer.type)
@@ -659,6 +664,7 @@ function Player.canBuyOffer(self, offer)
 		and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_PREYSLOT
 		and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_HUNTINGSLOT
 		and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_PREYBONUS
+		and offer.type ~= GameStore.OfferTypes.DUST_FORGE	
 		and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_TEMPLE
 		and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_SEXCHANGE
 		and offer.type ~= GameStore.OfferTypes.OFFER_TYPE_HIRELING_SKILL
@@ -1799,6 +1805,14 @@ function GameStore.processPreyBonusReroll(player, offerCount)
 		return error({ code = 1, message = "You cannot own more than " .. limit .. " prey wildcards." })
 	end
 	player:addPreyCards(offerCount)
+end
+
+function GameStore.processDustForge(player, offerCount)
+	local limit = player:getForgeDustLevel()
+	if player:getForgeDusts() + offerCount >= player:getForgeDustLevel() + 1 then
+		return error({ code = 1, message = "You cannot own more than " .. limit .. " Dusts." })
+	end
+	player:addForgeDusts(offerCount)
 end
 
 function GameStore.processTempleTeleportPurchase(player)
