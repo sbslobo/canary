@@ -172,7 +172,7 @@ function playerDeath.onDeath(player, corpse, killer, mostDamageKiller, unjustifi
 	local mostDamageName, byPlayerMostDamage = getMostDamageInfo(mostDamageKiller)
 
 	player:takeScreenshot(byPlayer and SCREENSHOT_TYPE_DEATHPVP or SCREENSHOT_TYPE_DEATHPVE)
-
+	
 	if mostDamageKiller and mostDamageKiller:isPlayer() then
 		mostDamageKiller:takeScreenshot(SCREENSHOT_TYPE_PLAYERKILL)
 	end

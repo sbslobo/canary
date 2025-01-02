@@ -490,7 +490,7 @@ function parseBuyStoreOffer(playerId, msg)
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_SEXCHANGE then
 			GameStore.processSexChangePurchase(player)
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_EXPBOOST then
-			GameStore.processExpBoostPurchase(player)
+			GameStore.processExpBoostPurchase(player, offer.boostPercent)
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_HUNTINGSLOT then
 			GameStore.processTaskHuntingThirdSlot(player)
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_PREYSLOT then
@@ -928,7 +928,7 @@ function sendShowStoreOffers(playerId, category, redirectId)
 			for _, off in ipairs(offer.offers) do
 				xpBoostPrice = nil
 				if offer.type == GameStore.OfferTypes.OFFER_TYPE_EXPBOOST then
-					xpBoostPrice = GameStore.ExpBoostValues[player:getStorageValue(GameStore.Storages.expBoostCount)]
+					xpBoostPrice = offer.price
 				end
 
 				nameLockPrice = nil
@@ -1771,18 +1771,23 @@ function GameStore.processSexChangePurchase(player)
 	player:toggleSex()
 end
 
-function GameStore.processExpBoostPurchase(player)
-	local currentXpBoostTime = player:getXpBoostTime()
-	local expBoostCount = player:getStorageValue(GameStore.Storages.expBoostCount)
+function GameStore.processExpBoostPurchase(player, boostPercent)
+    local currentXpBoostTime = player:getXpBoostTime()
+    local expBoostCount = player:getStorageValue(GameStore.Storages.expBoostCount)
 
-	player:setXpBoostPercent(50)
-	player:setXpBoostTime(currentXpBoostTime + 3600)
+    -- Configurar el porcentaje del boost basado en el tipo seleccionado
+    boostPercent = boostPercent or 50 -- 50% por defecto si no se especifica
+    player:setXpBoostPercent(boostPercent)
 
-	if expBoostCount == -1 or expBoostCount == 6 then
-		expBoostCount = 1
-	end
+    -- Incrementar el tiempo de boost en 1 hora
+    player:setXpBoostTime(currentXpBoostTime + 3600)
 
-	player:setStorageValue(GameStore.Storages.expBoostCount, expBoostCount + 1)
+    -- Controlar la cantidad de boosts comprados
+    if expBoostCount == -1 or expBoostCount >= 6 then
+        expBoostCount = 1
+    end
+
+    player:setStorageValue(GameStore.Storages.expBoostCount, expBoostCount + 1)
 end
 
 function GameStore.processPreyThirdSlot(player)

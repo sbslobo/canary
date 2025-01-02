@@ -80,22 +80,25 @@ Blessings.DebugPrint = function(content, pre, pos)
 end
 
 Blessings.PlayerDeath = function(player, corpse, killer)
-	local hasAol = (player:getSlotItem(CONST_SLOT_NECKLACE) and player:getSlotItem(CONST_SLOT_NECKLACE):getId() == ITEM_AMULETOFLOSS)
-	local hasSkull = table.contains({ SKULL_RED, SKULL_BLACK }, player:getSkull())
-	local currBlessCount = player:getBlessings()
+    -- Aplica la lógica del Codex of Redemption
 
-	if hasSkull then
-		Blessings.DropLoot(player, corpse, 100, true)
-	elseif #currBlessCount < 5 and not hasAol then
-		local equipLossChance = Blessings.LossPercent[#currBlessCount].item
-		Blessings.DropLoot(player, corpse, equipLossChance)
-	end
+    local hasAol = (player:getSlotItem(CONST_SLOT_NECKLACE) and player:getSlotItem(CONST_SLOT_NECKLACE):getId() == ITEM_AMULETOFLOSS)
+    local hasSkull = table.contains({ SKULL_RED, SKULL_BLACK }, player:getSkull())
+    local currBlessCount = player:getBlessings()
 
-	if not player:getSlotItem(CONST_SLOT_BACKPACK) then
-		player:addItem(ITEM_BAG, 1, false, CONST_SLOT_BACKPACK)
-	end
+    if hasSkull then
+        Blessings.DropLoot(player, corpse, 100, true)
+    elseif #currBlessCount < 5 and not hasAol then
+        local equipLossChance = Blessings.LossPercent[#currBlessCount].item
+        Blessings.DropLoot(player, corpse, equipLossChance)
+    end
 
-	return true
+    -- Asegura que siempre tenga una mochila al morir
+    if not player:getSlotItem(CONST_SLOT_BACKPACK) then
+        player:addItem(ITEM_BAG, 1, false, CONST_SLOT_BACKPACK)
+    end
+
+    return true
 end
 
 Blessings.DropLoot = function(player, corpse, chance, skulled)
@@ -243,6 +246,7 @@ Blessings.getInquisitionPrice = function(player)
 	local totalBlessPrice = Blessings.getBlessingCost(player:getLevel(), false) * missing * Blessings.Config.InquisitonBlessPriceMultiplier
 	return missing, totalBlessPrice
 end
+
 
 Blessings.BuyAllBlesses = function(player)
 	if not Tile(player:getPosition()):hasFlag(TILESTATE_PROTECTIONZONE) and (player:isPzLocked() or player:getCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT)) then

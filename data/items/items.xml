@@ -53317,7 +53317,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="wrapableto" value="23398"/>
 		<attribute key="rotateto" value="28560"/>
 		<attribute key="type" value="dummy">
-			<attribute key="rate" value="110"/>
+			<attribute key="rate" value="125"/>
 		</attribute>
 	</item>
 	<item id="28560" article="a" name="ferumbras exercise dummy">
@@ -53326,7 +53326,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="wrapableto" value="23398"/>
 		<attribute key="rotateto" value="28559"/>
 		<attribute key="type" value="dummy">
-			<attribute key="rate" value="110"/>
+			<attribute key="rate" value="125"/>
 		</attribute>
 	</item>
 	<item id="28561" article="a" name="demon exercise dummy">
@@ -53335,7 +53335,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="wrapableto" value="23398"/>
 		<attribute key="rotateto" value="28562"/>
 		<attribute key="type" value="dummy">
-			<attribute key="rate" value="110"/>
+			<attribute key="rate" value="125"/>
 		</attribute>
 	</item>
 	<item id="28562" article="a" name="demon exercise dummy">
@@ -53344,7 +53344,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="wrapableto" value="23398"/>
 		<attribute key="rotateto" value="28561"/>
 		<attribute key="type" value="dummy">
-			<attribute key="rate" value="110"/>
+			<attribute key="rate" value="125"/>
 		</attribute>
 	</item>
 	<item id="28563" article="a" name="monk exercise dummy">
@@ -53353,7 +53353,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="wrapableto" value="23398"/>
 		<attribute key="rotateto" value="28564"/>
 		<attribute key="type" value="dummy">
-			<attribute key="rate" value="110"/>
+			<attribute key="rate" value="100"/>
 		</attribute>
 	</item>
 	<item id="28564" article="a" name="monk exercise dummy">
@@ -53362,7 +53362,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="wrapableto" value="23398"/>
 		<attribute key="rotateto" value="28563"/>
 		<attribute key="type" value="dummy">
-			<attribute key="rate" value="110"/>
+			<attribute key="rate" value="100"/>
 		</attribute>
 	</item>
 	<item id="28565" article="an" name="exercise dummy">
@@ -79730,5 +79730,13 @@ Granted by TibiaGoals.com"/>
 		<attribute key="description" value="Offers a soul to the Soulpit. Combine with an exalted core to turn it into a lesser soul core."/>
 		<attribute key="weight" value="100"/>
 	</item>
+	<item id="49279" article="the" name="Codex Of Redemption">
+		<attribute key="description" value="Harness the sacred power of redemption. Use this tome to grant yourself all blessings."/>
+		<attribute key="weight" value="0"/>
+	</item>
+	<item id="49280" article="a" name="Roulette ticket">
+		<attribute key="description" value="A mysterious ticket infused with the magic of fortune. Use it to spin the roulette and unlock incredible treasures!"/>
+		<attribute key="weight" value="0"/>
+	</item>	
 </items>
 
