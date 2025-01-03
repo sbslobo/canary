@@ -14,6 +14,10 @@
 class ItemTypeFunctions {
 public:
 	static void init(lua_State* L);
+	// ItemLevel Functions -->
+	static int luaItemGetItemLevel(lua_State* L);
+	static int luaItemSetItemLevel(lua_State* L);
+	// ItemLevel Functions <--
 
 private:
 	static int luaItemTypeCreate(lua_State* L);
@@ -78,4 +82,5 @@ private:
 	static int luaItemTypeGetVocationString(lua_State* L);
 
 	static int luaItemTypeHasSubType(lua_State* L);
+
 };

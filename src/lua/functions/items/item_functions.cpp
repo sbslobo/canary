@@ -89,6 +89,11 @@ void ItemFunctions::init(lua_State* L) {
 	Lua::registerMethod(L, "Item", "getTier", ItemFunctions::luaItemGetTier);
 	Lua::registerMethod(L, "Item", "setTier", ItemFunctions::luaItemSetTier);
 	Lua::registerMethod(L, "Item", "getClassification", ItemFunctions::luaItemGetClassification);
+	
+			// ItemLevel Functions -->
+	Lua::registerMethod(L, "Item", "getItemLevel", ItemFunctions::luaItemGetItemLevel); 
+	Lua::registerMethod(L, "Item", "setItemLevel", ItemFunctions::luaItemSetItemLevel);
+			// ItemLevel Functions <--	
 
 	Lua::registerMethod(L, "Item", "canReceiveAutoCarpet", ItemFunctions::luaItemCanReceiveAutoCarpet);
 
@@ -991,6 +996,37 @@ int ItemFunctions::luaItemSetTier(lua_State* L) {
 	Lua::pushBoolean(L, true);
 	return 1;
 }
+
+// ItemLevel -->
+
+int ItemFunctions::luaItemGetItemLevel(lua_State* L) {
+	// item:getItemLevel()
+	std::shared_ptr<Item> item = Lua::getUserdataShared<Item>(L, 1);
+	if (!item) {
+		Lua::reportErrorFunc(Lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
+		Lua::pushBoolean(L, false);
+		return 1;
+	}
+
+	lua_pushnumber(L, item->getItemLevel());
+	return 1;
+}
+
+int ItemFunctions::luaItemSetItemLevel(lua_State* L) {
+	// item:setItemLevel(level)
+	std::shared_ptr<Item> item = Lua::getUserdataShared<Item>(L, 1);
+	if (!item) {
+		Lua::reportErrorFunc(Lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
+		Lua::pushBoolean(L, false);
+		return 1;
+	}
+
+	item->setItemLevel(Lua::getNumber<uint8_t>(L, 2));
+	Lua::pushBoolean(L, true);
+	return 1;
+}
+
+// ItemLevel Functions <--
 
 int ItemFunctions::luaItemGetClassification(lua_State* L) {
 	// item:getClassification()

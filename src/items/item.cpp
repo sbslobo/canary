@@ -853,6 +853,21 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream &propStream) {
 			break;
 		}
 
+		// ItemLevel Functions -->
+
+		case ATTR_ITEMLEVEL: {
+			uint8_t itemlevel;
+			if (!propStream.read<uint8_t>(itemlevel)) {
+				g_logger().error("[{}] failed to read level", __FUNCTION__);
+				return ATTR_READ_ERROR;
+			}
+
+			setAttribute(ItemAttribute_t::ITEMLEVEL, itemlevel);
+			break;
+		}
+
+			// ItemLevel Functions <--
+
 		case ATTR_AMOUNT: {
 			uint16_t amount;
 			if (!propStream.read<uint16_t>(amount)) {
@@ -1077,6 +1092,15 @@ void Item::serializeAttr(PropWriteStream &propWriteStream) const {
 		propWriteStream.write<uint8_t>(ATTR_TIER);
 		propWriteStream.write<uint8_t>(getTier());
 	}
+
+		// ItemLevel Functions -->
+
+	if (hasAttribute(ItemAttribute_t::ITEMLEVEL)) {
+		propWriteStream.write<uint8_t>(ATTR_ITEMLEVEL);
+		propWriteStream.write<uint8_t>(getItemLevel());
+	}
+
+	// ItemLevel Functions <--
 
 	if (hasAttribute(ItemAttribute_t::AMOUNT)) {
 		propWriteStream.write<uint8_t>(ATTR_AMOUNT);
@@ -1515,6 +1539,7 @@ Item::getDescriptions(const ItemType &it, const std::shared_ptr<Item> &item /*= 
 
 		if (it.upgradeClassification > 0) {
 			descriptions.emplace_back("Tier", std::to_string(item->getTier()));
+			descriptions.emplace_back("Level", std::to_string(item->getItemLevel())); // ItemLevel Functions
 		}
 
 		std::string slotName;
@@ -2125,6 +2150,15 @@ SoundEffect_t Item::getMovementSound(const std::shared_ptr<Cylinder> &toCylinder
 
 std::string Item::parseClassificationDescription(const std::shared_ptr<Item> &item) {
 	std::ostringstream string;
+	// ItemLevel Functions -->
+	if (item && item->getItemLevel() >= 1) {
+		string << std::endl
+			   << " Level: " << std::to_string(item->getItemLevel());
+		if (item->getWeaponType() == 6) {
+			string << " (Increase Magic Level +" << std::to_string(item->getItemLevel()) << ").";
+		}
+	}
+	// ItemLevel Functions <--
 	if (item && item->getClassification() >= 1) {
 		string << std::endl
 			   << "Classification: " << std::to_string(item->getClassification()) << " Tier: " << std::to_string(item->getTier());

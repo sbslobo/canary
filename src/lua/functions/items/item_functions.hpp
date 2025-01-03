@@ -13,9 +13,14 @@
 #include "lua/functions/items/imbuement_functions.hpp"
 #include "lua/functions/items/item_type_functions.hpp"
 #include "lua/functions/items/weapon_functions.hpp"
+#include "lua/scripts/luascript.hpp"
 class ItemFunctions {
 public:
 	static void init(lua_State* L);
+	// ItemLevel Functions -->
+	static int luaItemGetItemLevel(lua_State* L);
+	static int luaItemSetItemLevel(lua_State* L);
+	// ItemLevel Functions <--
 
 private:
 	static int luaItemCreate(lua_State* L);

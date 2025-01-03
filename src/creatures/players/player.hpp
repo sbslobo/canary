@@ -523,6 +523,15 @@ public:
 	 * @param itemAmount is uint32_t because stash item is uint32_t max
 	 */
 	bool removeItemCountById(uint16_t itemId, uint32_t itemAmount, bool removeFromStash = true);
+	
+	    // Verifica si el jugador tiene el Codex of Redemption
+  bool hasCodexOfRedemption() const;
+
+    // Comprueba el estado de las bendiciones al morir
+  void checkBlessingsOnDeath();
+
+    // Sobrecarga de la función 'die' para integrar la lógica del Codex
+  void die();
 
 	void addItemOnStash(uint16_t itemId, uint32_t amount);
 	uint32_t getStashItemCount(uint16_t itemId) const;

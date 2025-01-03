@@ -701,6 +701,27 @@ public:
 		return items[id].upgradeClassification;
 	}
 
+	// ItemLevel Functions -->
+
+	uint8_t getItemLevel() const {
+		if (!hasAttribute(ItemAttribute_t::ITEMLEVEL)) {
+			return 0;
+		}
+
+		auto itemlevel = getAttribute<uint8_t>(ItemAttribute_t::ITEMLEVEL);
+
+		return itemlevel;
+	}
+
+	void setItemLevel(uint8_t itemlevel) {
+
+		if (items[id].upgradeClassification) {
+			setAttribute(ItemAttribute_t::ITEMLEVEL, itemlevel);
+		}
+	}
+
+	// ItemLevel Functions <--
+
 	void updateTileFlags();
 	bool canBeMoved() const;
 	void checkDecayMapItemOnMove();
