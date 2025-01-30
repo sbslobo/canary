@@ -6,7 +6,22 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ENERGY)
 function onGetFormulaValues(player, level, maglevel)
 	local min = (level / 5) + (maglevel * 4.5) + 35
 	local max = (level / 5) + (maglevel * 7.3) + 55
-	return -min, -max
+    local wand = player:getSlotItem(CONST_SLOT_LEFT) -- Slot de la mano izquierda
+    if wand then
+        local itemType = ItemType(wand:getId()) -- Obtén el tipo del ítem
+        local itemLevel = wand:getAttribute(ITEM_ATTRIBUTE_ITEMLEVEL)
+        local extradmg = 1 + (itemLevel * 0.03)
+
+        -- Obtiene el nombre del ítem y verifica si contiene "rod"
+        local itemName = wand:getName():lower() -- Convierte el nombre a minúsculas para evitar problemas de mayúsculas/minúsculas
+        if itemType and itemType:getWeaponType() == 6 and itemLevel > 0 and not itemName:find("rod") then
+            -- Solo aplica daño extra si no es una "rod"
+            min = min * extradmg
+            max = max * extradmg
+        end
+    end
+
+    return -min, -max
 end
 
 combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")

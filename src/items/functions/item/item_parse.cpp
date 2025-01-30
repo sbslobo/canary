@@ -262,16 +262,17 @@ void ItemParse::parseWeaponType(const std::string &stringValue, pugi::xml_attrib
 		auto lowerString = asLowerCaseString(valueAttribute.as_string());
 		const auto &itemMap = WeaponTypesMap.find(lowerString);
 		if (itemMap != WeaponTypesMap.end()) {
-			if (stringValue == "spellbook") {
+			itemType.weaponType = itemMap->second;
+
+			// Marca los spellbooks
+			if (lowerString == "spellbook") {
 				itemType.spellbook = true;
 			}
-			itemType.weaponType = itemMap->second;
 		} else {
 			g_logger().warn("[Items::parseItemNode] - Unknown weaponType {}", valueAttribute.as_string());
 		}
 	}
 }
-
 void ItemParse::parseSlotType(const std::string &stringValue, pugi::xml_attribute valueAttribute, ItemType &itemType) {
 	if (stringValue == "slottype") {
 		itemType.slotPosition = SLOTP_HAND;

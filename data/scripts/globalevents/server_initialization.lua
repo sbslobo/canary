@@ -135,6 +135,4 @@ function serverInitialization.onStartup()
 	Game.reload(RELOAD_TYPE_ITEMS)	
 end
 
- Game.reload(RELOAD_TYPE_ITEMS)
-
 serverInitialization:register()

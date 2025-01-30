@@ -99,6 +99,7 @@ bool Item::getImbuementInfo(uint8_t slot, ImbuementInfo* imbuementInfo) const {
 	return imbuementInfo->duration && imbuementInfo->imbuement;
 }
 
+
 void Item::setImbuement(uint8_t slot, uint16_t imbuementId, uint32_t duration) {
 	const auto valueDuration = (static_cast<int64_t>(duration > 0 ? (duration << 8) | imbuementId : 0));
 	setCustomAttribute(std::to_string(ITEM_IMBUEMENT_SLOT + slot), valueDuration);
@@ -146,51 +147,108 @@ bool Item::hasImbuementCategoryId(uint16_t categoryId) const {
 }
 
 double Item::getDodgeChance() const {
-	if (getTier() == 0) {
-		return 0;
+	double tierChance = 0.0;
+	double levelChance = 0.0;
+
+	if (getTier() > 0) {
+		tierChance = quadraticPoly(
+			g_configManager().getFloat(RUSE_CHANCE_FORMULA_A),
+			g_configManager().getFloat(RUSE_CHANCE_FORMULA_B),
+			g_configManager().getFloat(RUSE_CHANCE_FORMULA_C),
+			getTier()
+		);
 	}
-	return quadraticPoly(
-		g_configManager().getFloat(RUSE_CHANCE_FORMULA_A),
-		g_configManager().getFloat(RUSE_CHANCE_FORMULA_B),
-		g_configManager().getFloat(RUSE_CHANCE_FORMULA_C),
-		getTier()
-	);
+
+	if (getItemLevel() > 0) {
+		levelChance = quadraticPoly(
+			g_configManager().getFloat(RUSE_CHANCE_FORMULA_A),
+			g_configManager().getFloat(RUSE_CHANCE_FORMULA_B),
+			g_configManager().getFloat(RUSE_CHANCE_FORMULA_C),
+			getTier()
+		);
+	}
+
+	// Combina ambas probabilidades
+	return tierChance + levelChance;
 }
 
 double Item::getFatalChance() const {
-	if (getTier() == 0) {
-		return 0;
+	double tierChance = 0.0;
+	double levelChance = 0.0;
+
+	// Calcula la probabilidad basada en el tier, si aplica
+	if (getTier() > 0) {
+		tierChance = quadraticPoly(
+			g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_A),
+			g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_B),
+			g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_C),
+			getTier()
+		);
 	}
-	return quadraticPoly(
-		g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_A),
-		g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_B),
-		g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_C),
-		getTier()
-	);
+
+	// Calcula la probabilidad basada en el nivel del ítem, si aplica
+	if (getItemLevel() > 0) {
+		levelChance = quadraticPoly(
+			g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_A),
+			g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_B),
+			g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_C),
+			getItemLevel()
+		);
+	}
+
+	// Combina ambas probabilidades
+	return tierChance + levelChance;
 }
 
 double Item::getMomentumChance() const {
-	if (getTier() == 0) {
-		return 0;
+	double tierChance = 0.0;
+	double levelChance = 0.0;
+
+
+	if (getTier() > 0) {
+		tierChance = quadraticPoly(
+			g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_A),
+			g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_B),
+			g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_C),
+			getTier()
+		);
 	}
-	return quadraticPoly(
-		g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_A),
-		g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_B),
-		g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_C),
-		getTier()
-	);
+
+	if (getItemLevel() > 0) {
+		levelChance = quadraticPoly(
+			g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_A),
+			g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_B),
+			g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_C),
+			getTier()
+		);
+	}
+	// Combina ambas probabilidades
+	return tierChance + levelChance;
 }
 
 double Item::getTranscendenceChance() const {
-	if (getTier() == 0) {
-		return 0;
+	double tierChance = 0.0;
+	double levelChance = 0.0;
+
+	if (getTier() > 0) {
+		tierChance = quadraticPoly(
+			g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_A),
+			g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_B),
+			g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_C),
+			getTier()
+		);
 	}
-	return quadraticPoly(
-		g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_A),
-		g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_B),
-		g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_C),
-		getTier()
-	);
+
+	if (getItemLevel() > 0) {
+		levelChance = quadraticPoly(
+			g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_A),
+			g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_B),
+			g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_C),
+			getTier()
+		);
+	}
+	// Combina ambas probabilidades
+	return tierChance + levelChance;
 }
 
 uint8_t Item::getTier() const {
@@ -2150,30 +2208,119 @@ SoundEffect_t Item::getMovementSound(const std::shared_ptr<Cylinder> &toCylinder
 
 std::string Item::parseClassificationDescription(const std::shared_ptr<Item> &item) {
 	std::ostringstream string;
-	// ItemLevel Functions -->
-	if (item && item->getItemLevel() >= 1) {
-		string << std::endl
-			   << " Level: " << std::to_string(item->getItemLevel());
-		if (item->getWeaponType() == 6) {
-			string << " (Increase Magic Level +" << std::to_string(item->getItemLevel()) << ").";
-		}
-	}
-	// ItemLevel Functions <--
 	if (item && item->getClassification() >= 1) {
 		string << std::endl
 			   << "Classification: " << std::to_string(item->getClassification()) << " Tier: " << std::to_string(item->getTier());
 		if (item->getTier() != 0) {
 			if (Item::items[item->getID()].weaponType != WEAPON_NONE) {
-				string << fmt::format(" ({:.2f}% Onslaught).", item->getFatalChance());
+				// Calcula el porcentaje de Onslaught basado en el tier
+				double tierOnslaught = quadraticPoly(
+					g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_A),
+					g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_B),
+					g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_C),
+					item->getTier()
+				);
+				string << fmt::format(" ({:.2f}% Onslaught).", tierOnslaught);
 			} else if (g_game().getObjectCategory(item) == OBJECTCATEGORY_HELMETS) {
-				string << fmt::format(" ({:.2f}% Momentum).", item->getMomentumChance());
+				double tierMomentum = quadraticPoly(
+					g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_A),
+					g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_B),
+					g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_C),
+					item->getTier()
+				);
+				string << fmt::format(" ({:.2f}% Momentum).", tierMomentum);
 			} else if (g_game().getObjectCategory(item) == OBJECTCATEGORY_ARMORS) {
-				string << fmt::format(" ({:.2f}% Ruse).", item->getDodgeChance());
+				double tierRuse = quadraticPoly(
+					g_configManager().getFloat(RUSE_CHANCE_FORMULA_A),
+					g_configManager().getFloat(RUSE_CHANCE_FORMULA_B),
+					g_configManager().getFloat(RUSE_CHANCE_FORMULA_C),
+					item->getTier()
+				);
+				string << fmt::format(" ({:.2f}% Ruse ).", tierRuse);
 			} else if (g_game().getObjectCategory(item) == OBJECTCATEGORY_LEGS) {
-				string << fmt::format(" ({:.2f}% Transcendence).", item->getTranscendenceChance());
+				double TierTranscendance = quadraticPoly(
+					g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_A),
+					g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_B),
+					g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_C),
+					item->getTier()
+				);
+				string << fmt::format(" ({:.2f}% Transcendance ).", TierTranscendance);
 			}
 		}
 	}
+
+		// ItemLevel Functions -->
+	if (item && item->getItemLevel() >= 1) {
+		double itemlevel = item->getItemLevel();
+		double damage = (item->getItemLevel() * 100) / 33;
+
+		string << std::endl
+			   << " \nItem Level: " << std::to_string(item->getItemLevel());
+		if (item->getWeaponType() == 1 || item->getWeaponType() == 2 || item->getWeaponType() == 3 || item->getWeaponType() == 5 || item->getWeaponType() == 6) {
+			// Calcula el porcentaje de Onslaught basado en el nivel
+			double levelOnslaught = quadraticPoly(
+				g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_A),
+				g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_B),
+				g_configManager().getFloat(ONSLAUGHT_CHANCE_FORMULA_C),
+				item->getItemLevel()
+			);
+			string << fmt::format(" \n({:.2f}% Onslaught).", levelOnslaught);
+			if (item->getWeaponType() == 6) {
+
+				// Verifica si el nombre del ítem contiene "rod"
+				std::string itemName = item->getName(); // Obtén el nombre del ítem
+				std::transform(itemName.begin(), itemName.end(), itemName.begin(), ::tolower); // Convierte a minúsculas para hacer la búsqueda insensible a mayúsculas/minúsculas
+
+				if (itemName.find("rod") != std::string::npos) {
+					// Si el nombre contiene "rod", aplica Earth Damage
+					string << fmt::format(" \n({:.2f}% Earth Damage).", damage);
+					string << fmt::format(" \n(Magic Level: +{:.2f}).", itemlevel);
+				} else {
+					// Para otros casos, aplica Energy Damage
+					string << fmt::format(" \n({:.2f}% Energy Damage).", damage);
+					string << fmt::format(" \n(+{:.2f} Magic Level).", itemlevel);
+				}
+			}
+		} else if (g_game().getObjectCategory(item) == OBJECTCATEGORY_SHIELDS) {
+			if (item->isSpellBook()) {
+				string << fmt::format(" \n(Ultimate Explosion Damage: +{:.2f}%).", damage);
+			} else {
+				double levelMomentum = quadraticPoly(
+					g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_A),
+					g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_B),
+					g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_C),
+					item->getItemLevel()
+				);
+				string << fmt::format(" ({:.2f}% Momentum).", levelMomentum);
+			}
+		} else if (g_game().getObjectCategory(item) == OBJECTCATEGORY_HELMETS) {
+			double levelMomentum = quadraticPoly(
+				g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_A),
+				g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_B),
+				g_configManager().getFloat(MOMENTUM_CHANCE_FORMULA_C),
+				item->getItemLevel()
+			);
+			string << fmt::format(" ({:.2f}% Momentum).", levelMomentum);
+		} else if (g_game().getObjectCategory(item) == OBJECTCATEGORY_ARMORS) {
+			double levelRuse = quadraticPoly(
+				g_configManager().getFloat(RUSE_CHANCE_FORMULA_A),
+				g_configManager().getFloat(RUSE_CHANCE_FORMULA_B),
+				g_configManager().getFloat(RUSE_CHANCE_FORMULA_C),
+				item->getItemLevel()
+			);
+			string << fmt::format(" ({:.2f}% Ruse).", levelRuse);
+		} else if (g_game().getObjectCategory(item) == OBJECTCATEGORY_LEGS) {
+			double levelTranscendance = quadraticPoly(
+				g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_A),
+				g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_B),
+				g_configManager().getFloat(TRANSCENDANCE_CHANCE_FORMULA_C),
+				item->getItemLevel()
+			);
+			string << fmt::format(" ({:.2f}% Transcendance).", levelTranscendance);
+		}
+	}
+
+	// ItemLevel Functions <--
 	return string.str();
 }
 

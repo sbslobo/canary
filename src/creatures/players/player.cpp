@@ -5747,6 +5747,9 @@ void Player::addBestiaryKill(const std::shared_ptr<MonsterType> &mType) {
 		return;
 	}
 	uint32_t kills = g_configManager().getNumber(BESTIARY_KILL_MULTIPLIER);
+	if (isVip()) {
+		kills += 1;
+	}
 	if (isConcoctionActive(Concoction_t::BestiaryBetterment)) {
 		kills *= 2;
 	}
@@ -6400,11 +6403,20 @@ bool Player::isInWarList(uint32_t guildId) const {
 
 uint32_t Player::getMagicLevel() const {
 	uint32_t magic = std::max<int32_t>(0, getLoyaltyMagicLevel() + varStats[STAT_MAGICPOINTS]);
+
 	// Wheel of destiny magic bonus
 	magic += m_wheelPlayer->getStat(WheelStat_t::MAGIC); // Regular bonus
 	magic += m_wheelPlayer->getMajorStatConditional("Positional Tactics", WheelMajor_t::MAGIC); // Revelation bonus
+
+	// Agregar el nivel del ítem equipado, solo para wands y rods
+	std::shared_ptr<Item> item = getInventoryItem(CONST_SLOT_LEFT); // Por ejemplo, ítem en la mano izquierda
+	if (item && (item->getWeaponType() == 6)) {
+		magic += item->getItemLevel();
+	}
+
 	return magic;
 }
+
 
 uint32_t Player::getLoyaltyMagicLevel() const {
 	uint32_t level = getBaseMagicLevel();
@@ -8984,6 +8996,10 @@ void Player::forgeFuseItems(ForgeAction_t actionType, uint16_t firstItemId, uint
 		attributeFromItem = ItemAttribute_t::ATTACK;
 		attributeFromItemValue = forgedAttack;
 	}
+	if (itemAttr == WEAPON_WAND) {
+		attributeFromItem = ItemAttribute_t::MAGIC_LEVEL;
+		attributeFromItemValue = itemLevel; // Usar el nivel del ítem como bonus
+	}
 
 	// ItemLevel Functions variables end
 
@@ -10429,7 +10445,7 @@ bool Player::hasPermittedConditionInPZ() const {
 uint16_t Player::getDodgeChance() const {
 	uint16_t chance = 0;
 	if (const auto &playerArmor = getInventoryItem(CONST_SLOT_ARMOR);
-	    playerArmor != nullptr && playerArmor->getTier()) {
+	    playerArmor != nullptr && (playerArmor->getTier() > 0 || playerArmor->getItemLevel() >0)) {
 		chance += static_cast<uint16_t>(playerArmor->getDodgeChance() * 100);
 	}
 

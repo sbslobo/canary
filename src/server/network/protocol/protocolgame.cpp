@@ -5412,7 +5412,11 @@ void ProtocolGame::sendForgingData() {
 	// (convergence transfer) dust cost - 160
 	msg.addByte(static_cast<uint8_t>(g_configManager().getNumber(FORGE_CONVERGENCE_TRANSFER_DUST_COST)));
 	// (fusion) Base success rate - 50
-	msg.addByte(static_cast<uint8_t>(g_configManager().getNumber(FORGE_BASE_SUCCESS_RATE)));
+	if (player->isVip()) {
+		msg.addByte(static_cast<uint8_t>(g_configManager().getNumber(FORGE_BASE_SUCCESS_RATE) + 20));
+	} else {
+		msg.addByte(static_cast<uint8_t>(g_configManager().getNumber(FORGE_BASE_SUCCESS_RATE)));
+	}
 	// (fusion) Bonus success rate - 15
 	msg.addByte(static_cast<uint8_t>(g_configManager().getNumber(FORGE_BONUS_SUCCESS_RATE)));
 	// (fusion) Tier loss chance after reduction - 50

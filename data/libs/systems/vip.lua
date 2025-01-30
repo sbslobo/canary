@@ -1,6 +1,6 @@
 local config = {
-	outfits = {},
-	mounts = {},
+	outfits = {1613, 1612, 852, 853, 1575, 1576},
+	mounts = {203, 204, 205},
 }
 
 function Player.onRemoveVip(self)

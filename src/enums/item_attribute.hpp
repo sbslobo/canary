@@ -47,7 +47,8 @@ enum class ItemAttribute_t : uint64_t {
 	STORE_INBOX_CATEGORY = 34,
 	OBTAINCONTAINER = 35,
 	AUGMENTS = 36,
-	ITEMLEVEL = 37, // ItemLevel Functions
+	ITEMLEVEL = 37,
+	MAGIC_LEVEL = 38,	// ItemLevel Functions
 };
 
 enum ItemDecayState_t : uint8_t {

@@ -1001,7 +1001,7 @@ int ItemFunctions::luaItemSetTier(lua_State* L) {
 
 int ItemFunctions::luaItemGetItemLevel(lua_State* L) {
 	// item:getItemLevel()
-	std::shared_ptr<Item> item = Lua::getUserdataShared<Item>(L, 1);
+	const auto &item = Lua::getUserdataShared<Item>(L, 1);
 	if (!item) {
 		Lua::reportErrorFunc(Lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		Lua::pushBoolean(L, false);
@@ -1014,7 +1014,7 @@ int ItemFunctions::luaItemGetItemLevel(lua_State* L) {
 
 int ItemFunctions::luaItemSetItemLevel(lua_State* L) {
 	// item:setItemLevel(level)
-	std::shared_ptr<Item> item = Lua::getUserdataShared<Item>(L, 1);
+	const auto &item = Lua::getUserdataShared<Item>(L, 1);
 	if (!item) {
 		Lua::reportErrorFunc(Lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		Lua::pushBoolean(L, false);

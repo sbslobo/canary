@@ -6,7 +6,23 @@ combat:setArea(createCombatArea(AREA_RING1_BURST3))
 function onGetFormulaValues(player, level, maglevel)
 	local min = (level / 5) + (maglevel * 7)
 	local max = (level / 5) + (maglevel * 10.5)
+	local wand = player:getSlotItem(CONST_SLOT_LEFT) -- Slot de la mano izquierda
+	if wand then
+		local itemType = ItemType(wand:getId()) -- Obtén el tipo del ítem
+		local itemLevel = wand:getAttribute(ITEM_ATTRIBUTE_ITEMLEVEL)
+		local extradmg = 1 + (itemLevel * 0.03)
+
+		-- Obtiene el nombre del ítem y verifica si contiene "rod"
+		local itemName = wand:getName():lower() -- Convierte el nombre a minúsculas para evitar problemas de mayúsculas/minúsculas
+		if itemType and itemType:getWeaponType() == 6 and itemLevel > 0 and itemName:find("rod") then
+			-- Aplica daño extra si el nombre contiene "rod"
+			min = min * extradmg
+			max = max * extradmg
+		end
+	end
+
 	return -min, -max
+
 end
 
 combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")

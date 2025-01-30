@@ -1,7 +1,7 @@
 local taskSystemKill = CreatureEvent("taskSystemKill")
 
 
-function taskSystemKill.onKill(player, target)
+function taskSystemKill.onDeath(player, target)
 
 	if target:isPlayer() or target:getMaster() then
 		return true

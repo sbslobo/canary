@@ -154,6 +154,7 @@ public:
 	static std::shared_ptr<Task> createPlayerTask(uint32_t delay, std::function<void(void)> f, const std::string &context);
 
 	void setID() override;
+	void increaseMagicLevel(int value);
 
 	void setOnline(bool value) override {
 		online = value;

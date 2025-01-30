@@ -2266,7 +2266,7 @@ void Combat::applyExtensions(const std::shared_ptr<Creature> &caster, const std:
 	if (player) {
 		// Fatal hit (onslaught)
 		if (const auto &playerWeapon = player->getInventoryItem(CONST_SLOT_LEFT);
-		    playerWeapon != nullptr && playerWeapon->getTier() > 0) {
+		    playerWeapon != nullptr && (playerWeapon->getTier() > 0 || playerWeapon->getItemLevel() > 0)) {
 			const double_t fatalChance = playerWeapon->getFatalChance();
 			const double_t randomChance = uniform_random(0, 10000) / 100;
 			if (fatalChance > 0 && randomChance < fatalChance) {

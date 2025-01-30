@@ -22250,7 +22250,7 @@
 		<attribute key="extradef" value="2"/>
 		<attribute key="defense" value="28"/>
 		<attribute key="weight" value="8800"/>
-		<attribute key="imbuementslot" value="1">
+		<attribute key="imbuementslot" value="2">
 			<attribute key="elemental damage" value="3"/>
 			<attribute key="life leech" value="3"/>
 			<attribute key="mana leech" value="3"/>
@@ -22258,7 +22258,7 @@
 			<attribute key="skillboost axe" value="3"/>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
-			<attribute key="level" value="110"/>
+			<attribute key="level" value="100"/>
 			<attribute key="unproperly" value="true"/>
 			<attribute key="weaponType" value="axe"/>
 			<attribute key="slot" value="hand"/>
@@ -22328,7 +22328,7 @@
 		<attribute key="extradef" value="2"/>
 		<attribute key="defense" value="30"/>
 		<attribute key="weight" value="6500"/>
-		<attribute key="imbuementslot" value="1">
+		<attribute key="imbuementslot" value="2">
 			<attribute key="elemental damage" value="3"/>
 			<attribute key="life leech" value="3"/>
 			<attribute key="mana leech" value="3"/>
@@ -29016,7 +29016,7 @@
 	</item>
 	<item id="11691" article="a" name="snake god's wristguard">
 		<attribute key="description" value="It shows your spells and can also shield against attacks when worn"/>
-		<attribute key="weaponType" value="shield"/>
+		<attribute key="weaponType" value="spellbook"/>
 		<attribute key="magiclevelpoints" value="3"/>
 		<attribute key="defense" value="14"/>
 		<attribute key="weight" value="2800"/>
@@ -34594,7 +34594,7 @@
 		<attribute key="primarytype" value="sword weapons"/>
 		<attribute key="weaponType" value="sword"/>
 		<attribute key="skillsword" value="1"/>
-		<attribute key="attack" value="49"/>
+		<attribute key="attack" value="52"/>
 		<attribute key="extradef" value="2"/>
 		<attribute key="defense" value="35"/>
 		<attribute key="weight" value="4500"/>
@@ -34606,7 +34606,7 @@
 			<attribute key="skillboost sword" value="3"/>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
-			<attribute key="level" value="120"/>
+			<attribute key="level" value="150"/>
 			<attribute key="unproperly" value="true"/>
 			<attribute key="weaponType" value="sword"/>
 			<attribute key="slot" value="hand"/>
@@ -45040,7 +45040,7 @@ Awarded by TibiaMisterios.com.br"/>
 	</item>
 	<item id="22720" article="an" name="iron token" plural="iron tokens">
 		<attribute key="primarytype" value="valuables"/>
-		<attribute key="weight" value="20"/>
+		<attribute key="weight" value="1"/>
 	</item>
 	<item id="22721" article="a" name="gold token" plural="gold tokens">
 		<attribute key="primarytype" value="valuables"/>
@@ -45208,7 +45208,7 @@ Awarded by TibiaMisterios.com.br"/>
 		</attribute>
 	</item>
 	<item id="22755" article="a" name="book of lies">
-		<attribute key="weaponType" value="shield"/>
+		<attribute key="weaponType" value="spellbook"/>
 		<attribute key="magiclevelpoints" value="4"/>
 		<attribute key="defense" value="18"/>
 		<attribute key="weight" value="2400"/>
@@ -48716,6 +48716,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="range" value="5"/>
 		<attribute key="weight" value="3200"/>
 		<attribute key="imbuementslot" value="2">
+			<attribute key="critical hit" value="3"/>		
 			<attribute key="life leech" value="3"/>
 			<attribute key="mana leech" value="3"/>
 			<attribute key="skillboost magic level" value="3"/>
@@ -55432,7 +55433,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 	</item>
 	<item id="29420" article="a" name="shoulder plate">
 		<attribute key="primarytype" value="spellbooks"/>
-		<attribute key="weaponType" value="shield"/>
+		<attribute key="weaponType" value="spellbook"/>
 		<attribute key="absorbpercentphysical" value="2"/>
 		<attribute key="absorbpercentpoison" value="6"/>
 		<attribute key="magiclevelpoints" value="3"/>
@@ -55558,7 +55559,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		</attribute>
 	</item>
 	<item id="29426" article="a" name="brain in a jar">
-		<attribute key="weaponType" value="shield"/>
+		<attribute key="weaponType" value="spellbook"/>
 		<attribute key="absorbpercentpoison" value="7"/>
 		<attribute key="magiclevelpoints" value="3"/>
 		<attribute key="defense" value="19"/>
@@ -73973,7 +73974,7 @@ Granted by TibiaGoals.com"/>
 		</attribute>
 	</item>
 	<item id="40594" article="an" name="alchemist's notepad">
-		<attribute key="weaponType" value="shield"/>
+		<attribute key="weaponType" value="spellbook"/>
 		<attribute key="absorbpercentdeath" value="5"/>
 		<attribute key="magiclevelpoints" value="2"/>
 		<attribute key="firemagiclevelpoints" value="2"/>
@@ -80126,11 +80127,11 @@ Granted by TibiaGoals.com"/>
 		<attribute key="description" value="Offers a soul to the Soulpit. Combine with an exalted core to turn it into a lesser soul core."/>
 		<attribute key="weight" value="100"/>
 	</item>
-	<item id="49279" article="the" name="Codex Of Redemption">
+	<item id="49698" article="the" name="Codex Of Redemption">
 		<attribute key="description" value="Harness the sacred power of redemption. Use this tome to grant yourself all blessings."/>
 		<attribute key="weight" value="0"/>
 	</item>
-	<item id="49280" article="a" name="Roulette ticket">
+	<item id="49699" article="a" name="Roulette ticket">
 		<attribute key="description" value="A mysterious ticket infused with the magic of fortune. Use it to spin the roulette and unlock incredible treasures!"/>
 		<attribute key="weight" value="0"/>
 	</item>	
